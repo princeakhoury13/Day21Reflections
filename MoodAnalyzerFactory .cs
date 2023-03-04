@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,22 +9,20 @@ namespace Day21Reflections
 {
     public class MoodAnalyzerFactory
     {
-        public static AnalyzeMood CreateMoodAnalyzer()
+        public static MoodAnalyzer CreateMoodAnalyzerObject(string message)
         {
-            try
+            Type type = Type.GetType("Day21Reflections.MoodAnalyzer");
+            if (type == null)
             {
-                Type type = Type.GetType("Day21Reflections.AnalyzeMood");
-                AnalyzeMood moodAnalyzer = (AnalyzeMood)Activator.CreateInstance(type);
-                return moodAnalyzer;
+                throw new MoodAnalysisException("Class not found");
             }
-            catch (ArgumentNullException)
+            if (!typeof(MoodAnalyzer).IsAssignableFrom(type))
             {
-                throw new MoodAnalysisException("Exception Raised: Class not found!");
+                throw new MoodAnalysisException("Given class does not inherit MoodAnalyzer class");
             }
-            catch (Exception)
-            {
-                throw new MoodAnalysisException("Exception Raised: Constructor is not found!");
-            }
+            ConstructorInfo constructor = type.GetConstructor(new[] { typeof(string) });
+            object instance = constructor.Invoke(new object[] { message });
+            return (MoodAnalyzer)instance;
         }
     }
 }
