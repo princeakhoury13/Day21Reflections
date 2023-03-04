@@ -2,12 +2,12 @@
 {
     class Program
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
             try
             {
-                AnalyzeMood mood = MoodAnalyzerFactory.CreateMoodAnalyzer();
-                Console.WriteLine(mood.Analyze(""));
+                MoodAnalyzer moodAnalyzer = MoodAnalyzerFactory.CreateMoodAnalyzerObject("I am happy");
+                Console.WriteLine(moodAnalyzer.AnalyzeMood());
             }
             catch (MoodAnalysisException ex)
             {
