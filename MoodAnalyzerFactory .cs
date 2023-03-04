@@ -24,5 +24,14 @@ namespace Day21Reflections
             object instance = constructor.Invoke(new object[] { message });
             return (MoodAnalyzer)instance;
         }
+
+
+        public static string InvokeAnalyzeMoodMethod(string message)
+        {
+            MoodAnalyzer moodAnalyzer = CreateMoodAnalyzerObject(message);
+            Type type = moodAnalyzer.GetType();
+            MethodInfo analyzeMoodMethod = type.GetMethod("AnalyzeMood");
+            return (string)analyzeMoodMethod.Invoke(moodAnalyzer, null);
+        }
     }
 }
